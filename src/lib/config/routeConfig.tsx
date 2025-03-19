@@ -26,7 +26,7 @@ export const routeConfig: Record<AppRoutes, RouteProps> = {
     path: RoutePath.table,
     element: (
       <PrivateRoute>
-        <TablePage />{' '}
+        <TablePage />
       </PrivateRoute>
     ),
   },

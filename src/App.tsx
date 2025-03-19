@@ -1,21 +1,20 @@
 import { Provider } from 'react-redux';
 import { Route, BrowserRouter as Router, Routes } from 'react-router-dom';
 
-import { CssBaseline, ThemeProvider, createTheme } from '@mui/material';
+import { CssBaseline, ThemeProvider } from '@mui/material';
 import { PersistGate } from 'redux-persist/integration/react';
 
 import './App.css';
 
 import { AppRoutes, routeConfig } from './lib/config/routeConfig.tsx';
+import { themeConfig } from './lib/theme/config.ts';
 import { persistor, store } from './store/store.ts';
-
-const theme = createTheme();
 
 function App() {
   return (
     <Provider store={store}>
       <PersistGate loading={null} persistor={persistor}>
-        <ThemeProvider theme={theme}>
+        <ThemeProvider theme={themeConfig}>
           <CssBaseline />
           <Router>
             <Routes>

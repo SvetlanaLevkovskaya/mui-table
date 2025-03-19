@@ -1,10 +1,11 @@
+import { EditedData } from '../../types';
 import { ENV } from '../config/enviorement.ts';
 
 export const apiFetch = async (
   endpoint: string,
   method: string,
   token: string | null,
-  body?: any
+  body?: EditedData
 ) => {
   try {
     const response = await fetch(`${ENV.apiBaseUrl}/userdocs/${endpoint}`, {
@@ -18,10 +19,11 @@ export const apiFetch = async (
     const result = await response.json();
     if (!response.ok) {
       console.error(`Error ${method} ${endpoint}`, result);
+      return { error: result.error };
     }
     return result;
   } catch (error) {
     console.error(`Request failed: ${method} ${endpoint}`, error);
-    return null;
+    return error;
   }
 };

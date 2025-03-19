@@ -33,13 +33,13 @@ export const LoginPage = () => {
 
   return (
     <Container maxWidth="sm">
-      <Box display="flex" flexDirection="column" alignItems="center" mt={10}>
+      <Box display="flex" flexDirection="column" alignItems="center">
         <Typography variant="h4" gutterBottom>
           Log In
         </Typography>
         <form onSubmit={handleSubmit} style={{ width: '100%' }}>
           <TextField
-            label="Username"
+            label="user[N]"
             fullWidth
             margin="normal"
             variant="outlined"
@@ -47,7 +47,7 @@ export const LoginPage = () => {
             onChange={(e) => setUsername(e.target.value)}
           />
           <TextField
-            label="Password"
+            label="password"
             type="password"
             fullWidth
             margin="normal"

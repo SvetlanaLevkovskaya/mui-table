@@ -1,56 +1,28 @@
-import { ChangeEvent, useEffect, useState } from 'react';
+import { ChangeEvent, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
 
-import {
-  Button,
-  Container,
-  Paper,
-  Table,
-  TableBody,
-  TableCell,
-  TableContainer,
-  TableHead,
-  TableRow,
-  TextField,
-} from '@mui/material';
+import { Container } from '@mui/material';
 
+import { useTableData } from '../../hooks/useTableData.ts';
 import { apiFetch } from '../../lib/api/table.ts';
 import { RoutePath } from '../../lib/config/routeConfig.tsx';
 import { logout } from '../../store/slices/authSlice.ts';
 import { RootState } from '../../store/store.ts';
+import { EditedData, TableRowData } from '../../types';
 
-interface TableRowData {
-  id: string;
-  companySigDate: string;
-  companySignatureName: string;
-  documentName: string;
-  documentStatus: string;
-  documentType: string;
-  employeeNumber: string;
-  employeeSigDate: string;
-  employeeSignatureName: string;
-}
-
-interface EditedData extends Partial<TableRowData> {}
+import { SnackbarNotification } from './SnackbarNotification/SnackbarNotification.tsx';
+import { TableActions } from './TableActions/TableActions.tsx';
+import { TableList } from './TableList/TableList.tsx';
 
 export const TablePage = () => {
   const token = useSelector((state: RootState) => state.auth.token);
   const dispatch = useDispatch();
   const navigate = useNavigate();
-  const [data, setData] = useState<TableRowData[]>([]);
+  const { data, isLoading, errorMessage, setData, setErrorMessage } = useTableData(token);
+
   const [editingRow, setEditingRow] = useState<string | null>(null);
   const [editedData, setEditedData] = useState<EditedData>({});
-
-  useEffect(() => {
-    const fetchData = async () => {
-      const result = await apiFetch('get', 'GET', token);
-      if (result) {
-        setData(result.data);
-      }
-    };
-    if (token) fetchData();
-  }, [token]);
 
   const handleAddRecord = async () => {
     const newRecord = {
@@ -81,10 +53,10 @@ export const TablePage = () => {
       setData((prevData) => prevData.filter((row) => row.id !== id));
     } else {
       console.error('Error deleting the record');
+      setErrorMessage(result.error);
     }
   };
-
-  const handleEditClick = (row: any) => {
+  const handleEditClick = (row: TableRowData) => {
     setEditingRow(row.id);
     setEditedData(row);
   };
@@ -93,7 +65,10 @@ export const TablePage = () => {
     e: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>,
     field: string
   ) => {
-    setEditedData((prev) => ({ ...prev, [field]: e.target.value }));
+    setEditedData((prev) => ({
+      ...prev,
+      [field]: e.target.value,
+    }));
   };
 
   const handleSaveEdit = async (id: string) => {
@@ -108,153 +83,30 @@ export const TablePage = () => {
     }
   };
 
+  const handleCloseSnackbar = () => setErrorMessage('');
+
   return (
-    <Container>
-      <Button
-        variant="contained"
-        color="primary"
-        onClick={handleAddRecord}
-        style={{ marginBottom: '16px' }}
-      >
-        Add Record
-      </Button>
-      <Button
-        variant="contained"
-        color="secondary"
-        onClick={handleLogOut}
-        style={{ marginBottom: '16px' }}
-      >
-        Log Out
-      </Button>
-      <TableContainer component={Paper}>
-        <Table>
-          <TableHead>
-            <TableRow>
-              <TableCell>Company Sig Date</TableCell>
-              <TableCell>Company Signature Name</TableCell>
-              <TableCell>Document Name</TableCell>
-              <TableCell>Document Status</TableCell>
-              <TableCell>Document Type</TableCell>
-              <TableCell>Employee Number</TableCell>
-              <TableCell>Employee Sig Date</TableCell>
-              <TableCell>Employee Signature Name</TableCell>
-              <TableCell>Actions</TableCell>
-            </TableRow>
-          </TableHead>
-          <TableBody>
-            {data.map((row) => (
-              <TableRow key={row.id}>
-                <TableCell>
-                  {editingRow === row.id ? (
-                    <TextField
-                      value={editedData.companySigDate}
-                      onChange={(e) => handleEditChange(e, 'companySigDate')}
-                    />
-                  ) : (
-                    row.companySigDate
-                  )}
-                </TableCell>
-                <TableCell>
-                  {editingRow === row.id ? (
-                    <TextField
-                      value={editedData.companySignatureName}
-                      onChange={(e) => handleEditChange(e, 'companySignatureName')}
-                    />
-                  ) : (
-                    row.companySignatureName
-                  )}
-                </TableCell>
-                <TableCell>
-                  {editingRow === row.id ? (
-                    <TextField
-                      value={editedData.documentName}
-                      onChange={(e) => handleEditChange(e, 'documentName')}
-                    />
-                  ) : (
-                    row.documentName
-                  )}
-                </TableCell>
-                <TableCell>
-                  {editingRow === row.id ? (
-                    <TextField
-                      value={editedData.documentStatus}
-                      onChange={(e) => handleEditChange(e, 'documentStatus')}
-                    />
-                  ) : (
-                    row.documentStatus
-                  )}
-                </TableCell>
-                <TableCell>
-                  {editingRow === row.id ? (
-                    <TextField
-                      value={editedData.documentType}
-                      onChange={(e) => handleEditChange(e, 'documentType')}
-                    />
-                  ) : (
-                    row.documentType
-                  )}
-                </TableCell>
-                <TableCell>
-                  {editingRow === row.id ? (
-                    <TextField
-                      value={editedData.employeeNumber}
-                      onChange={(e) => handleEditChange(e, 'employeeNumber')}
-                    />
-                  ) : (
-                    row.employeeNumber
-                  )}
-                </TableCell>
-                <TableCell>
-                  {editingRow === row.id ? (
-                    <TextField
-                      value={editedData.employeeSigDate}
-                      onChange={(e) => handleEditChange(e, 'employeeSigDate')}
-                    />
-                  ) : (
-                    row.employeeSigDate
-                  )}
-                </TableCell>
-                <TableCell>
-                  {editingRow === row.id ? (
-                    <TextField
-                      value={editedData.employeeSignatureName}
-                      onChange={(e) => handleEditChange(e, 'employeeSignatureName')}
-                    />
-                  ) : (
-                    row.employeeSignatureName
-                  )}
-                </TableCell>
-                <TableCell>
-                  {editingRow === row.id ? (
-                    <Button
-                      variant="contained"
-                      color="primary"
-                      onClick={() => handleSaveEdit(row.id)}
-                    >
-                      Save
-                    </Button>
-                  ) : (
-                    <Button
-                      variant="contained"
-                      color="primary"
-                      onClick={() => handleEditClick(row)}
-                    >
-                      Edit
-                    </Button>
-                  )}
-                  <Button
-                    variant="contained"
-                    color="error"
-                    onClick={() => handleDeleteRecord(row.id)}
-                  >
-                    Delete
-                  </Button>
-                </TableCell>
-              </TableRow>
-            ))}
-          </TableBody>
-        </Table>
-      </TableContainer>
+    <Container
+      sx={{
+        display: 'flex',
+        flexDirection: 'column',
+        alignItems: 'center',
+        justifyContent: 'flex-start',
+        height: '80vh',
+      }}
+    >
+      <TableActions onAddRecord={handleAddRecord} onLogOut={handleLogOut} />
+      <TableList
+        data={data}
+        isLoading={isLoading}
+        editingRow={editingRow}
+        editedData={editedData}
+        onEditClick={handleEditClick}
+        onEditChange={handleEditChange}
+        onSaveEdit={handleSaveEdit}
+        onDelete={handleDeleteRecord}
+      />
+      <SnackbarNotification message={errorMessage} onClose={handleCloseSnackbar} />
     </Container>
   );
 };
