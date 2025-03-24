@@ -1,54 +1,36 @@
-# React + TypeScript + Vite
+## Описание
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+Проект "MUI-Table App"  — это веб-приложение для управления входом пользователей, просмотра и фильтрации продуктов, а также взаимодействия с базой данных через административный интерфейс. Приложение позволяет пользователям аутентифицироваться, просматривать данные и выполнять CRUD-операции с таблицей записей. Приложение использует Redux для управления состоянием и Material-UI для компонентного интерфейса.
 
-Currently, two official plugins are available:
+## Используемые технологии
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react/README.md) uses [Babel](https://babeljs.io/) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+- React
+- React RouterДобавление записи
+- Redux Toolkit
+- TypeScript
+- Material-UI
+- JWT Authentication
+- ESLint
+- Prettier
 
-## Expanding the ESLint configuration
+## Функционал
 
-If you are developing a production application, we recommend updating the configuration to enable type-aware lint rules:
+### Страница входа
 
-```js
-export default tseslint.config({
-  extends: [
-    // Remove ...tseslint.configs.recommended and replace with this
-    ...tseslint.configs.recommendedTypeChecked,
-    // Alternatively, use this for stricter rules
-    ...tseslint.configs.strictTypeChecked,
-    // Optionally, add this for stylistic rules
-    ...tseslint.configs.stylisticTypeChecked,
-  ],
-  languageOptions: {
-    // other options...
-    parserOptions: {
-      project: ['./tsconfig.node.json', './tsconfig.app.json'],
-      tsconfigRootDir: import.meta.dirname,
-    },
-  },
-});
-```
+- **Форма входа** Пользователи вводят свои данные для входа (пользователь и пароль).
+- **Авторизация:** При успешном входе пользователи перенаправляются на страницу с таблицей.
+- **Обработка ошибок:** В случае неудачной попытки входа пользователю отображается сообщение об ошибке.
 
-You can also install [eslint-plugin-react-x](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-x) and [eslint-plugin-react-dom](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-dom) for React-specific lint rules:
+### Страница таблицы
+#### CRUD операции с таблицей
 
-```js
-// eslint.config.js
-import reactDom from 'eslint-plugin-react-dom';
-import reactX from 'eslint-plugin-react-x';
+- **Добавление записи:** Пользователи могут добавлять новые записи в таблицу.
+- **Редактирование записи:** Пользователи могут редактировать существующие записи.
+- **Удаление записи:** Пользователи могут удалять записи.
+- **Обработка ошибок:** В случае неудачной попытки пользователю отображается сообщение об ошибке.
 
-export default tseslint.config({
-  plugins: {
-    // Add the react-x and react-dom plugins
-    'react-x': reactX,
-    'react-dom': reactDom,
-  },
-  rules: {
-    // other rules...
-    // Enable its recommended typescript rules
-    ...reactX.configs['recommended-typescript'].rules,
-    ...reactDom.configs.recommended.rules,
-  },
-});
-```
+## Установка и запуск
+
+- Клонируйте репозиторий на свой локальный компьютер.
+- Установите зависимости, выполнив команду npm install.
+- Запустите приложение командой npm run dev.
