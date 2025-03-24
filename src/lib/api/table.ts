@@ -16,14 +16,17 @@ export const apiFetch = async (
       },
       body: body ? JSON.stringify(body) : undefined,
     });
+
     const result = await response.json();
+
     if (!response.ok) {
       console.error(`Error ${method} ${endpoint}`, result);
-      return { error: result.error };
+      return { error: result.title || 'Ошибка запроса' };
     }
+
     return result;
   } catch (error) {
     console.error(`Request failed: ${method} ${endpoint}`, error);
-    return error;
+    return { error: 'Ошибка сети или сервера' };
   }
 };

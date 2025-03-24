@@ -1,4 +1,6 @@
-export const columns: { label: string; key: string; width: string }[] = [
+import { TableRowData } from '../../../../types';
+
+export const columns: { label: string; key: keyof TableRowData; width: string }[] = [
   { label: 'Company Sig Date', key: 'companySigDate', width: '114px' },
   { label: 'Company Signature Name', key: 'companySignatureName', width: '146px' },
   { label: 'Document Name', key: 'documentName', width: '126px' },

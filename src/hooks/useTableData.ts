@@ -1,10 +1,10 @@
 import { useEffect, useState } from 'react';
 
 import { apiFetch } from '../lib/api/table.ts';
-import { TableRowData } from '../types';
+import { EditedData } from '../types';
 
 export const useTableData = (token: string | null) => {
-  const [data, setData] = useState<TableRowData[]>([]);
+  const [data, setData] = useState<EditedData[]>([]);
   const [isLoading, setIsLoading] = useState(false);
   const [errorMessage, setErrorMessage] = useState('');
 
@@ -13,8 +13,13 @@ export const useTableData = (token: string | null) => {
       if (!token) return;
       setIsLoading(true);
       const response = await apiFetch('get', 'GET', token);
-      if (response) setData(response.data);
-      else setErrorMessage('Ошибка загрузки данных');
+
+      if (response.error) {
+        setErrorMessage(`Ошибка загрузки данных: ${response.error}`);
+      } else {
+        setData(response.data);
+      }
+
       setIsLoading(false);
     };
 

@@ -11,25 +11,26 @@ import {
   TableRow,
 } from '@mui/material';
 
-import { EditedData, TableRowData } from '../../../types';
+import { EditedData } from '../../../../types';
 import { TableRowItem } from '../TableRowItem/TableRowItem.tsx';
 import { columns } from '../constants/columns.ts';
 
 type Props = {
-  data: TableRowData[];
+  data: EditedData[];
   isLoading: boolean;
-  editingRow: string | null;
-  editedData: EditedData;
-  onEditClick: (row: TableRowData) => void;
-  onEditChange: (e: ChangeEvent<HTMLTextAreaElement | HTMLInputElement>, field: string) => void;
-  onSaveEdit: (id: string) => void;
-  onDelete: (id: string) => void;
+  editedData: EditedData | null;
+  onEditClick: (row: EditedData) => void;
+  onEditChange: <T extends keyof EditedData>(
+    e: ChangeEvent<HTMLTextAreaElement | HTMLInputElement>,
+    field: T
+  ) => void;
+  onSaveEdit: (id?: string) => void;
+  onDelete: (id?: string) => void;
 };
 
 export const TableList = ({
   data,
   isLoading,
-  editingRow,
   editedData,
   onEditClick,
   onEditChange,
@@ -63,7 +64,6 @@ export const TableList = ({
                 key={row.id}
                 row={row}
                 columns={columns}
-                editingRow={editingRow}
                 editedData={editedData}
                 onEditClick={onEditClick}
                 onEditChange={onEditChange}

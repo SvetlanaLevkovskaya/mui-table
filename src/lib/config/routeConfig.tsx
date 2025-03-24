@@ -1,9 +1,8 @@
+import { Suspense } from 'react';
 import { RouteProps } from 'react-router-dom';
 
-import { PrivateRoute } from '../../components';
-import { LoginPage } from '../../pages';
-import { TablePage } from '../../pages';
-import { NotFoundPage } from '../../pages';
+import { PrivateRoute, Spinner } from '../../components';
+import { LoginPage, NotFoundPage, TablePage } from '../../pages';
 
 export enum AppRoutes {
   LOGIN = 'login',
@@ -26,7 +25,9 @@ export const routeConfig: Record<AppRoutes, RouteProps> = {
     path: RoutePath.table,
     element: (
       <PrivateRoute>
-        <TablePage />
+        <Suspense fallback={<Spinner />}>
+          <TablePage />
+        </Suspense>
       </PrivateRoute>
     ),
   },
